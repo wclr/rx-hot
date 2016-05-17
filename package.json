@@ -1,0 +1,15 @@
+{
+  "name": "rx-hot",
+  "keywords": ["rx", "rxjs", "hot", "factory", "dx"],
+  "version": "1.0.0",
+  "description": "Hot factories of Rx.Observable (rx.js v.4)", 
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "devDependencies": {
+    "rx": "^4.1.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
