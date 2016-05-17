@@ -18,7 +18,7 @@ import {just, merge, interval} from 'rx-hot'
 let source$ = merge([
  just(0),
  interval(1000)
-])     
+]).filter(_ => _ % 2)     
 ```
 
 Instead of:
@@ -29,7 +29,7 @@ import {Observable as O} from 'rx'
 let source$ = O.merge([
  O.just(0),
  O.interval(1000)
-]).share() // need to make it hot explicitly
+]).filter(_ => _ % 2).share() // need to make it hot explicitly
 ```
 
 

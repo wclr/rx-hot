@@ -7,7 +7,7 @@ var combine = factory.combine
 
 var test = require('tape')
 
-test.skip('combine object', function (t) {
+test('combine object', function (t) {
   var foo$ = of(5)
   var bar$ = of(10)
 
