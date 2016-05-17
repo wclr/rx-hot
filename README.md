@@ -14,7 +14,7 @@ npm i rx-hot -S
 ```js
 import {just, merge, interval} from 'rx-hot'
 
-// will be `host` or `multicated` by default
+// will be `hot` (or `multicated`) by default
 let source$ = merge([
  just(0),
  interval(1000)
