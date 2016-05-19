@@ -1,26 +1,34 @@
 var Observable = require('rx').Observable
+var _Proxy
 
-const methodsToShare = [
-  'filter', 'map', 'first', 'last', 'delay', 'throttle',
-  'concat', 'sample', 'withLatestFrom', 'zip', 'combineLatest',
-  'skip', 'skipLast', 'skipLastWithTime', 'skipUntil',
-  'skipUntilWithTime', 'skipWhile', 'skipWithTime',
-  'take', 'takeLast', 'takeLastWithTime', 'takeUntil',
-  'takeUntilWithTime', 'takeWhile', 'takeWithTime'
-]
+if (typeof Proxy === 'function'){
+  _Proxy = Proxy
+} else {
+  _Proxy = function (target, handler) {
+    this.__target = target
+    this.__handler = handler
+  }
+  _Proxy.prototype = Object.keys(Observable.prototype)
+    .filter(function (key) {
+      return typeof Observable.prototype[key] === 'function'
+    })
+    .reduce(function (proto, key) {
+      proto[key] = function() {
+        return this.__handler.get(this.__target, key).apply(this, arguments)
+      }
+      return proto
+    }, {})
+}
 
 function makeCompletelyHot(stream) {
   if (Observable.isObservable(stream)) {
-    stream = stream.share()
-    for (var i = 0; i < methodsToShare.length; i++){
-        var prop = methodsToShare[i]
-        ;(function(prop) {
-          var _oldMethod = stream[prop]
-          stream[prop] = function () {
-            return makeCompletelyHot(_oldMethod.apply(stream, arguments))
-          }
-        })(prop)
-    }
+    return new _Proxy(stream.share(), {
+      get: function (stream, method) {
+        return function () {
+          return makeCompletelyHot(stream[method].apply(stream, arguments))
+        }
+      }
+    })
   }
   return stream
 }

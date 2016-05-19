@@ -7,13 +7,17 @@
     "factory",
     "dx"
   ],
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Hot factories of Rx.Observable (rx.js v.4)",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "node --harmony-proxies test.js",
+    "test-watch": "node-dev --respawn test.js",
+    "test-browser": "budo --open test.js"
   },
   "devDependencies": {
+    "browserify": "^13.0.1",
+    "budo": "^8.2.2",
     "rx": "^4.1.0",
     "tape": "^4.5.1"
   },

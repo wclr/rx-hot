@@ -1,9 +1,9 @@
 # Rx-hot
 
-**Hot** (multicasted) factories of Rx.Observable ([rx.js](https://github.com/Reactive-Extensions/RxJS) v.4).  
+> Factories for creating :fire: **hot** (multicasted) *Rx.Observable* streams ([rx.js](https://github.com/Reactive-Extensions/RxJS) v.4).  
 
 ## Why?
-Everyone likes it **hot**, right? Especialy [cycle.js](http://cycle.js.org/) with [xstream](https://github.com/staltz/xstream). 
+Everyone likes it **hot**, right? Especially [cycle.js](http://cycle.js.org/) with [xstream](https://github.com/staltz/xstream). 
 So let's **make streams hot** by default with [rx](https://github.com/Reactive-Extensions/RxJS).
 
 
@@ -45,3 +45,9 @@ let bar$ = interval(5000)
 let source$ = combine({foo$, bar$})
   .map(({foo, bar}) =>  foo + bar)  
 ```
+
+## Is it safe to use?
+
+Yes, quite! It just adds `.share()` to created streams and via simple proxing 
+(with native **ES6 Proxy** if available) makes stream's operators to create hot streams either. 
+And this effects only streams created using factories from `rx-hot`, it doesn't mess with `Rx.Observable` itself. 
