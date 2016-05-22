@@ -48,6 +48,9 @@ let source$ = combine({foo$, bar$})
 
 ## Is it safe to use?
 
-Yes, quite! It just adds `.share()` to created streams and via simple proxing 
-(with native **ES6 Proxy** if available) makes stream's operators to create hot streams either. 
-And this effects only streams created using factories from `rx-hot`, it doesn't mess with `Rx.Observable` itself. 
+Yes, quite! It makes consumer to subscribe to multicated (`publish().refCount()` aka `.share()`) 
+version of an original stream, this is accomplished using stream object proxing (with native *ES6 Proxy* if available). 
+ And this also should not create big overhead.
+
+This effects only streams created using factories from `rx-hot`, it doesn't mess with `Rx.Observable` itself. 
+You can also use exported `makeHot` method to make any `rx` stream really :fire: hot!
