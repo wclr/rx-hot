@@ -20,12 +20,16 @@ if (typeof Proxy === 'function'){
     }, {})
 }
 
-function makeCompletelyHot(stream) {
+function makeHot(stream) {
   if (Observable.isObservable(stream)) {
-    return new _Proxy(stream.share(), {
+    return new _Proxy(stream, {
       get: function (stream, method) {
         return function () {
-          return makeCompletelyHot(stream[method].apply(stream, arguments))
+          if ((method === 'subscribe' || method === 'forEach') && !stream.___shared) {
+            stream.___shared = stream.share()
+          }
+          stream = (stream.___shared ? stream.___shared : stream)
+          return makeHot(stream[method].apply(stream, arguments))
         }
       }
     })
@@ -37,7 +41,7 @@ var shared = Object.keys(Observable).filter(function (key) {
   return typeof Observable[key] === 'function'
 }).reduce(function (shared, method) {
   shared[method] = function () {
-    return makeCompletelyHot(Observable[method].apply(Observable, arguments))
+    return makeHot(Observable[method].apply(Observable, arguments))
   }
   return shared
 }, {})
@@ -68,4 +72,5 @@ shared.combine = function (obj) {
   return shared.combineLatest.apply(null, arguments)
 }
 
+shared.makeHot = makeHot
 module.exports = shared

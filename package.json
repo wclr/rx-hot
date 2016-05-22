@@ -7,7 +7,7 @@
     "factory",
     "dx"
   ],
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Hot factories of Rx.Observable (rx.js v.4)",
   "main": "index.js",
   "scripts": {

@@ -8,13 +8,13 @@ So let's **make streams hot** by default with [rx](https://github.com/Reactive-E
 
 
 ```bash
-npm i rx-hot -S
+npm i rx-hot rx -S
 ```
 
 ```js
 import {just, merge, interval} from 'rx-hot'
 
-// will be `hot` (or `multicated`) by default
+// created stream source$ will be `hot` (or `multicasted`)
 let source$ = merge([
  just(0),
  interval(1000)

@@ -1,4 +1,3 @@
-'use strict'
 var factory = require('./index')
 
 var merge = factory.merge
