@@ -7,6 +7,7 @@ if (typeof Proxy === 'function'){
   _Proxy = function (target, handler) {
     this.__target = target
     this.__handler = handler
+    this.isHot = true
   }
   _Proxy.prototype = Object.keys(Observable.prototype)
     .filter(function (key) {
@@ -24,11 +25,16 @@ function makeHot(stream) {
   if (Observable.isObservable(stream)) {
     return new _Proxy(stream, {
       get: function (stream, method) {
+        if (method === 'isHot'){
+          return true
+        }
         return function () {
-          if ((method === 'subscribe' || method === 'forEach') && !stream.___shared) {
-            stream.___shared = stream.share()
+          if ((method === 'subscribe' || method === 'forEach')) {
+            if (!stream.___shared){
+              stream.___shared = stream.share()
+            }
+            stream = stream.___shared
           }
-          stream = (stream.___shared ? stream.___shared : stream)
           return makeHot(stream[method].apply(stream, arguments))
         }
       }
